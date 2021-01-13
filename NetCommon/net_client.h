@@ -62,8 +62,8 @@ class client_interface {
       thrContext.join();
     }
 
-    // Destroy connection object ??? reset()
-    m_connection.release();
+    // Destroy connection object
+    m_connection.reset();
   }
 
   // Check if client is actually connected to a server
@@ -89,9 +89,6 @@ class client_interface {
 
   // Thread for context to execute its commands
   std::thread thrContext;
-
-  // The hardware socket that is connected to the server
-  // asio::ip::tcp::socket m_socket;
 
   // Connection object to handle data transfer
   std::unique_ptr<connection<T>> m_connection;
