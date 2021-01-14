@@ -5,6 +5,7 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 #include <chrono>
+#include <condition_variable>
 #include <cstdint>
 #include <deque>
 #include <iostream>

@@ -123,7 +123,13 @@ class server_interface {
     }
   }
 
-  void Update(size_t nMaxMessages = -1) {
+  // TODO: Refactor flag
+  void Update(size_t nMaxMessages = -1, bool bWait = false) {
+    // The server should not occupy 100% CPU Core
+    if (bWait) {
+      m_qMessagesIn.wait();
+    }
+
     size_t nMessageCount = 0;
     while (nMessageCount < nMaxMessages && !m_qMessagesIn.empty()) {
       // Grab the front message

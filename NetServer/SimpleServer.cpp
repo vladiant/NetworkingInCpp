@@ -64,7 +64,7 @@ int main() {
   server.Start();
 
   while (true) {
-    server.Update();
+    server.Update(-1, true);
   }
 
   return 0;

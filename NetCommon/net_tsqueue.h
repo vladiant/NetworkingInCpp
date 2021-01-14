@@ -28,13 +28,21 @@ class tsqueue {
   // Add an item to the back of Queue
   void push_back(const T& item) {
     std::lock_guard<std::mutex> lock(muxQueue);
-    return deqQueue.emplace_back(std::move(item));
+    deqQueue.emplace_back(std::move(item));
+
+    // TODO: Too many locks - rework!
+    std::unique_lock<std::mutex> u_lock(muxBlocking);
+    cvBlocking.notify_one();
   }
 
   // Add an item to the front of Queue
   void push_front(const T& item) {
     std::lock_guard<std::mutex> lock(muxQueue);
-    return deqQueue.emplace_front(std::move(item));
+    deqQueue.emplace_front(std::move(item));
+
+    // TODO: Too many locks - rework!
+    std::unique_lock<std::mutex> u_lock(muxBlocking);
+    cvBlocking.notify_one();
   }
 
   // Return true if Queue has no items
@@ -73,9 +81,20 @@ class tsqueue {
     return t;
   }
 
+  void wait() {
+    // TODO: Rework without loop
+    while (empty()) {
+      std::unique_lock<std::mutex> lock(muxBlocking);
+      cvBlocking.wait(lock);
+    }
+  }
+
  protected:
   std::mutex muxQueue;
   std::deque<T> deqQueue;
+
+  std::condition_variable cvBlocking;
+  std::mutex muxBlocking;
 };
 
 }  // namespace net
