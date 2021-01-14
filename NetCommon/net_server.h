@@ -103,7 +103,7 @@ class server_interface {
 
     for (auto& client : m_deqConnections) {
       // Check if client is connected
-      if (client && client->IsConnected) {
+      if (client && client->IsConnected()) {
         if (client != pIgnoreClient) {
           client->Send(msg);
         }
