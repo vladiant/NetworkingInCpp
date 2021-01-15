@@ -63,7 +63,7 @@ class server_interface {
           // Connection allowed - add to container of new connections
           m_deqConnections.push_back(std::move(newconn));
 
-          m_deqConnections.back()->ConnectToClient(nIDCounter++);
+          m_deqConnections.back()->ConnectToClient(this, nIDCounter++);
 
           std::cout << "[" << m_deqConnections.back()->GetID()
                     << "] Connection Approved\n";
@@ -141,6 +141,9 @@ class server_interface {
       nMessageCount++;
     }
   }
+
+  // Called when a client is validated
+  virtual void OnClientValidated(std::shared_ptr<connection<T>> client) {}
 
  protected:
   // Called when client connects, you can veto the connection by returning false
